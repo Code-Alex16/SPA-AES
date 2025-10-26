@@ -1,3 +1,25 @@
+/* ============================================
+   VARIABLES CSS - PALETA DE COLORES
+   ============================================ */
+:root {
+    --color-primario: #B84B44;      /* Rojo principal */
+    --color-primario-hover: #9d3e38; /* Rojo oscuro */
+    --color-beige-claro: #F5E6D3;   /* Beige claro */
+    --color-beige: #E8D5B7;         /* Beige medio */
+    --color-beige-oscuro: #D4C4A8;  /* Beige oscuro */
+    --color-texto: #2C2C2C;         /* Negro suave */
+    --color-texto-claro: #5A5A5A;   /* Gris texto */
+    --color-blanco: #FFFFFF;
+    --color-sombra: rgba(184, 75, 68, 0.15);
+    --color-exito: #4A7C59;
+    --color-error: #B84B44;
+    --borde-radio: 12px;
+    --transicion: all 0.3s ease;
+}
+
+/* ============================================
+   RESET Y ESTILOS GENERALES
+   ============================================ */
 * {
     margin: 0;
     padding: 0;
@@ -5,23 +27,28 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, var(--color-beige-claro) 0%, var(--color-beige) 100%);
+    color: var(--color-texto);
     min-height: 100vh;
-    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
+    line-height: 1.6;
 }
 
+/* ============================================
+   CONTENEDOR PRINCIPAL
+   ============================================ */
 .contenedor-principal {
-    max-width: 800px;
+    background: var(--color-blanco);
+    border-radius: var(--borde-radio);
     width: 100%;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 700px;
+    box-shadow: 0 20px 60px var(--color-sombra);
     overflow: hidden;
-    animation: aparecer 0.5s ease;
+    animation: aparecer 0.5s ease-out;
 }
 
 @keyframes aparecer {
@@ -35,9 +62,12 @@ body {
     }
 }
 
+/* ============================================
+   ENCABEZADO
+   ============================================ */
 .encabezado {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-primario) 0%, #9d3e38 100%);
+    color: var(--color-blanco);
     padding: 40px 30px;
     text-align: center;
     position: relative;
@@ -47,7 +77,7 @@ body {
 .encabezado::before {
     content: '🔐';
     position: absolute;
-    font-size: 150px;
+    font-size: 120px;
     opacity: 0.1;
     top: -20px;
     right: -20px;
@@ -60,185 +90,176 @@ body {
 }
 
 .encabezado h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
+    font-size: 2.2em;
+    font-weight: 700;
+    margin-bottom: 8px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .encabezado p {
-    font-size: 1.2em;
+    font-size: 1.05em;
     opacity: 0.95;
+    font-weight: 400;
 }
 
+/* ============================================
+   CONTENIDO
+   ============================================ */
 .contenido-aes {
-    padding: 40px;
+    padding: 35px;
 }
 
-.info-algoritmo {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    border-left: 5px solid #667eea;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.info-algoritmo h3 {
-    color: #667eea;
-    font-size: 1.5em;
-    margin-bottom: 10px;
-}
-
-.info-algoritmo ul {
-    list-style: none;
-    padding: 0;
-}
-
-.info-algoritmo li {
-    padding: 8px 0;
-    color: #555;
-    line-height: 1.6;
-}
-
-.info-algoritmo li::before {
-    content: '✓ ';
-    color: #667eea;
-    font-weight: bold;
-    margin-right: 8px;
-}
-
+/* ============================================
+   SECCIÓN DE ENTRADA
+   ============================================ */
 .seccion-entrada {
-    margin-bottom: 25px;
+    margin-bottom: 24px;
 }
 
 label {
     display: block;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
-    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-texto);
+    font-size: 0.95em;
 }
 
 textarea,
 input[type="text"],
 input[type="file"] {
     width: 100%;
-    padding: 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 1em;
+    padding: 14px;
+    border: 2px solid var(--color-beige-oscuro);
+    border-radius: 8px;
+    background-color: var(--color-beige-claro);
+    color: var(--color-texto);
+    font-size: 0.95em;
     font-family: 'Courier New', monospace;
-    transition: all 0.3s;
-    background: #f9f9f9;
+    transition: var(--transicion);
 }
 
 textarea {
-    min-height: 150px;
+    min-height: 130px;
     resize: vertical;
 }
 
 textarea:focus,
-input:focus {
+input[type="text"]:focus,
+input[type="file"]:focus {
     outline: none;
-    border-color: #667eea;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: var(--color-primario);
+    background-color: var(--color-blanco);
+    box-shadow: 0 0 0 3px rgba(184, 75, 68, 0.1);
 }
 
+/* Estilo personalizado para input file */
 input[type="file"] {
     padding: 12px;
     cursor: pointer;
-    background: white;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 input[type="file"]::file-selector-button {
-    background: #667eea;
-    color: white;
+    background: var(--color-primario);
+    color: var(--color-blanco);
     border: none;
     padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: bold;
-    margin-right: 15px;
-    transition: all 0.3s;
+    font-weight: 600;
+    margin-right: 12px;
+    transition: var(--transicion);
 }
 
 input[type="file"]::file-selector-button:hover {
-    background: #5568d3;
+    background: var(--color-primario-hover);
     transform: translateY(-2px);
 }
 
+/* ============================================
+   BOTONES
+   ============================================ */
 .grupo-botones {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin: 30px 0;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 28px 0;
 }
 
 button {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 10px;
-    font-size: 0.9em;
-    font-weight: bold;
+    padding: 14px 24px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95em;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: var(--transicion);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .btn-encriptar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: var(--color-primario);
+    color: var(--color-blanco);
+    border-color: var(--color-primario);
 }
 
 .btn-encriptar:hover {
+    background: var(--color-primario-hover);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(184, 75, 68, 0.3);
 }
 
 .btn-desencriptar {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
+    background: var(--color-blanco);
+    color: var(--color-primario);
+    border-color: var(--color-primario);
 }
 
 .btn-desencriptar:hover {
+    background: var(--color-primario);
+    color: var(--color-blanco);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+    box-shadow: 0 6px 20px rgba(184, 75, 68, 0.3);
 }
 
-.btn-limpiar {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-}
-
-.btn-limpiar:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
-}
-
+.btn-limpiar,
 .btn-descargar {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    margin-top: 10px;
-    color: white;
+    background: var(--color-beige);
+    color: var(--color-texto);
+    border-color: var(--color-beige-oscuro);
 }
 
+.btn-limpiar:hover,
 .btn-descargar:hover {
+    background: var(--color-beige-oscuro);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(67, 233, 123, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 button:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
 }
 
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ============================================
+   ALERTAS
+   ============================================ */
 .alerta {
-    padding: 15px 20px;
-    border-radius: 10px;
+    padding: 14px 18px;
+    border-radius: 8px;
     margin: 20px 0;
-    animation: deslizar 0.3s ease;
+    font-size: 0.92em;
+    text-align: center;
     font-weight: 500;
+    animation: deslizar 0.3s ease-out;
+    border-left: 4px solid;
 }
 
 @keyframes deslizar {
@@ -252,51 +273,53 @@ button:active {
     }
 }
 
-.alerta-error {
-    background: #ffe6e6;
-    color: #d32f2f;
-    border-left: 4px solid #d32f2f;
-}
-
 .alerta-exito {
-    background: #e6f7e6;
-    color: #388e3c;
-    border-left: 4px solid #388e3c;
+    background-color: #e8f5e9;
+    color: var(--color-exito);
+    border-left-color: var(--color-exito);
 }
 
+.alerta-error {
+    background-color: #ffebee;
+    color: var(--color-error);
+    border-left-color: var(--color-error);
+}
+
+/* ============================================
+   RESULTADO
+   ============================================ */
 .seccion-resultado {
-    background: #f5f5f5;
-    padding: 25px;
-    border-radius: 15px;
     margin-top: 30px;
-    border: 2px solid #e0e0e0;
+    padding-top: 25px;
+    border-top: 2px solid var(--color-beige);
 }
 
 .seccion-resultado h3 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1.3em;
+    color: var(--color-texto);
+    margin-bottom: 12px;
+    font-size: 1.15em;
+    font-weight: 600;
 }
 
 .resultado {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    border: 2px solid #ddd;
     min-height: 120px;
-    font-family: 'Courier New', monospace;
-    word-break: break-all;
-    white-space: pre-wrap;
-    font-size: 0.95em;
-    line-height: 1.6;
-    color: #444;
     max-height: 300px;
+    background: var(--color-beige-claro);
+    border: 2px solid var(--color-beige-oscuro);
+    border-radius: 8px;
+    padding: 16px;
     overflow-y: auto;
+    word-break: break-all;
+    font-family: 'Courier New', monospace;
+    font-size: 0.88em;
+    line-height: 1.6;
+    color: var(--color-texto);
+    margin-bottom: 15px;
 }
 
 .resultado:empty::before {
     content: 'El resultado de la encriptación aparecerá aquí...';
-    color: #999;
+    color: var(--color-texto-claro);
     font-style: italic;
 }
 
@@ -306,42 +329,61 @@ button:active {
 }
 
 .resultado::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--color-beige);
     border-radius: 10px;
 }
 
 .resultado::-webkit-scrollbar-thumb {
-    background: #667eea;
+    background: var(--color-primario);
     border-radius: 10px;
 }
 
 .resultado::-webkit-scrollbar-thumb:hover {
-    background: #5568d3;
+    background: var(--color-primario-hover);
 }
 
-.nota-importante {
-    background: #fff3cd;
-    border: 2px solid #ffc107;
-    color: #856404;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
+/* Botón descargar en sección resultado */
+.seccion-resultado .btn-descargar {
+    width: 100%;
 }
 
-.nota-importante strong {
-    display: block;
+/* ============================================
+   INFORMACIÓN ADICIONAL
+   ============================================ */
+.info-adicional {
+    background: var(--color-beige-claro);
+    padding: 18px;
+    border-radius: 8px;
+    margin-top: 25px;
+    border-left: 4px solid var(--color-primario);
+}
+
+.info-adicional h4 {
+    color: var(--color-primario);
     margin-bottom: 10px;
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+.info-adicional p {
+    font-size: 0.88em;
+    color: var(--color-texto-claro);
+    line-height: 1.6;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 600px) {
     .contenedor-principal {
         margin: 10px;
     }
 
     .contenido-aes {
-        padding: 20px;
+        padding: 25px;
+    }
+
+    .encabezado {
+        padding: 30px 20px;
     }
 
     .encabezado h1 {
@@ -351,9 +393,15 @@ button:active {
     .grupo-botones {
         grid-template-columns: 1fr;
     }
+
+    button {
+        width: 100%;
+    }
 }
 
-/* Animación de carga */
+/* ============================================
+   ANIMACIÓN DE CARGA
+   ============================================ */
 .cargando {
     pointer-events: none;
     opacity: 0.6;
@@ -367,8 +415,8 @@ button:active {
     left: 50%;
     width: 30px;
     height: 30px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #667eea;
+    border: 3px solid var(--color-beige);
+    border-top: 3px solid var(--color-primario);
     border-radius: 50%;
     animation: girar 1s linear infinite;
 }

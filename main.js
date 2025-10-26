@@ -1,165 +1,199 @@
-    // ========== FUNCIONES PARA LEER ARCHIVOS ==========
-    function leerArchivo(idArchivo, callback) {
-        var archivoInput = document.getElementById(idArchivo);
-        var archivo = archivoInput.files[0];
+// ============================================
+// UTILIDADES GENERALES
+// ============================================
 
-        if (archivo) {
-            var lector = new FileReader();
-            lector.onload = function(e) {
-                callback(e.target.result);
-            };
-            lector.readAsText(archivo);
-        }
+/**
+ * Lee un archivo de texto desde un input file
+ * @param {string} idArchivo - ID del input file
+ * @param {function} callback - Función que recibe el contenido
+ */
+function leerArchivo(idArchivo, callback) {
+    const archivoInput = document.getElementById(idArchivo);
+    const archivo = archivoInput.files[0];
+
+    if (archivo) {
+        const lector = new FileReader();
+        lector.onload = (e) => callback(e.target.result);
+        lector.onerror = () => {
+            mostrarAlerta('alerta-aes', 'Error al leer el archivo.', 'error');
+        };
+        lector.readAsText(archivo);
+    }
+}
+
+/**
+ * Muestra una alerta temporal
+ * @param {string} idContenedor - ID del contenedor de alertas
+ * @param {string} mensaje - Mensaje a mostrar
+ * @param {string} tipo - 'exito' o 'error'
+ */
+function mostrarAlerta(idContenedor, mensaje, tipo) {
+    const contenedor = document.getElementById(idContenedor);
+    const claseAlerta = tipo === 'error' ? 'alerta-error' : 'alerta-exito';
+    contenedor.innerHTML = `<div class="alerta ${claseAlerta}">${mensaje}</div>`;
+
+    setTimeout(() => {
+        contenedor.innerHTML = '';
+    }, 5000);
+}
+
+// ============================================
+// LÓGICA DE CIFRADO/DESCIFRADO
+// ============================================
+
+/**
+ * Carga los datos (desde textarea o archivo) y ejecuta la acción
+ * @param {string} accion - 'encriptar' o 'desencriptar'
+ */
+function cargarDatos(accion) {
+    const texto = document.getElementById('texto-aes').value.trim();
+    const clave = document.getElementById('clave-aes').value;
+    const archivo = document.getElementById('archivo-aes');
+
+    // Validar que existe una clave
+    if (!clave) {
+        mostrarAlerta('alerta-aes', 'Por favor ingresa una contraseña.', 'error');
+        return;
     }
 
-    // ========== FUNCIONES PARA MOSTRAR ALERTAS ==========
-    function mostrarAlerta(idContenedor, mensaje, tipo) {
-        var contenedor = document.getElementById(idContenedor);
-        var claseAlerta = tipo === 'error' ? 'alerta-error' : 'alerta-exito';
-        contenedor.innerHTML = '<div class="alerta ' + claseAlerta + '">' + mensaje + '</div>';
-
-        setTimeout(function() {
-            contenedor.innerHTML = '';
-        }, 5000);
+    // Prioridad: archivo > textarea
+    if (archivo.files.length > 0) {
+        leerArchivo('archivo-aes', (contenido) => {
+            ejecutarCifrado(accion, contenido.trim(), clave);
+        });
+    } else if (texto) {
+        ejecutarCifrado(accion, texto, clave);
+    } else {
+        mostrarAlerta('alerta-aes', 'Ingresa un texto o carga un archivo.', 'error');
     }
+}
 
-    // ========== FUNCIONES AES ==========
-    function encriptarAES() {
-        var texto = document.getElementById('texto-aes').value;
-        var clave = document.getElementById('clave-aes').value;
-        var archivo = document.getElementById('archivo-aes');
+/**
+ * Ejecuta el cifrado o descifrado AES-256
+ * @param {string} accion - 'encriptar' o 'desencriptar'
+ * @param {string} contenido - Texto a procesar
+ * @param {string} clave - Contraseña
+ */
+function ejecutarCifrado(accion, contenido, clave) {
+    try {
+        let resultado;
 
-        if (!clave) {
-            mostrarAlerta('alerta-aes', 'Por favor ingresa una contraseña', 'error');
-            return;
-        }
+        if (accion === 'encriptar') {
+            // ENCRIPTAR
+            resultado = CryptoJS.AES.encrypt(contenido, clave).toString();
+            mostrarAlerta('alerta-aes', 'Texto encriptado correctamente con AES-256.', 'exito');
 
-        if (archivo.files.length > 0) {
-            leerArchivo('archivo-aes', function(contenidoArchivo) {
-                try {
-                    var cifrado = CryptoJS.AES.encrypt(contenidoArchivo, clave).toString();
-                    document.getElementById('resultado-aes').textContent = cifrado;
-                    document.getElementById('texto-aes').value = '';
-                    mostrarAlerta('alerta-aes', 'Archivo encriptado con AES-256. Puedes descargarlo y desencriptarlo después.', 'exito');
-                } catch (error) {
-                    mostrarAlerta('alerta-aes', 'Error al encriptar el archivo. Verifica que sea un archivo de texto válido.', 'error');
-                }
-            });
-        } else {
-            if (!texto) {
-                mostrarAlerta('alerta-aes', 'Por favor ingresa un texto o carga un archivo', 'error');
-                return;
-            }
-            try {
-                var cifrado = CryptoJS.AES.encrypt(texto, clave).toString();
-                document.getElementById('resultado-aes').textContent = cifrado;
-                mostrarAlerta('alerta-aes', 'Texto encriptado con AES-256 correctamente', 'exito');
-            } catch (error) {
-                mostrarAlerta('alerta-aes', 'Error al encriptar. Intenta nuevamente.', 'error');
-            }
-        }
-    }
+        } else if (accion === 'desencriptar') {
+            // DESENCRIPTAR
+            const bytes = CryptoJS.AES.decrypt(contenido, clave);
+            resultado = bytes.toString(CryptoJS.enc.Utf8);
 
-    function desencriptarAES() {
-        var textoAreaCifrado = document.getElementById('texto-aes').value.trim();
-        var resultadoCifrado = document.getElementById('resultado-aes').textContent.trim();
-        var clave = document.getElementById('clave-aes').value;
-        var archivo = document.getElementById('archivo-aes');
-
-        if (!clave) {
-            mostrarAlerta('alerta-aes', 'Por favor ingresa la contraseña', 'error');
-            return;
-        }
-
-        // Si hay un archivo, leerlo primero
-        if (archivo.files.length > 0) {
-            leerArchivo('archivo-aes', function(contenidoArchivo) {
-                intentarDesencriptar(contenidoArchivo.trim(), clave);
-            });
-        } else {
-            // Prioridad: 1) texto en textarea, 2) texto en resultado
-            var textoCifrado = textoAreaCifrado || resultadoCifrado;
-
-            if (!textoCifrado) {
-                mostrarAlerta('alerta-aes', 'No hay texto cifrado. Pégalo en el campo de texto, carga un archivo o encripta primero.', 'error');
-                return;
-            }
-
-            intentarDesencriptar(textoCifrado, clave);
-        }
-    }
-
-    function intentarDesencriptar(textoCifrado, clave) {
-        try {
-            var bytes = CryptoJS.AES.decrypt(textoCifrado, clave);
-            // console.log(bytes)
-            var textoOriginal = bytes.toString(CryptoJS.enc.Utf8);
-
-            if (!textoOriginal) {
-                mostrarAlerta('alerta-aes', 'Error: Contraseña incorrecta o texto cifrado inválido', 'error');
+            // Validar que se pudo descifrar
+            if (!resultado) {
+                mostrarAlerta('alerta-aes', 'Error: Clave incorrecta o texto cifrado inválido.', 'error');
                 return;
             }
 
-            document.getElementById('resultado-aes').textContent = textoOriginal;
-            mostrarAlerta('alerta-aes', 'Texto desencriptado correctamente con AES-256', 'exito');
-        } catch (error) {
-            mostrarAlerta('alerta-aes', 'Error al desencriptar. Verifica que la contraseña sea correcta y el texto esté bien cifrado.', 'error');
+            mostrarAlerta('alerta-aes', 'Texto desencriptado correctamente con AES-256.', 'exito');
         }
+
+        // Mostrar resultado
+        document.getElementById('resultado-aes').textContent = resultado;
+
+    } catch (error) {
+        console.error('Error en cifrado:', error);
+        mostrarAlerta('alerta-aes', 'Ocurrió un error durante el proceso. Verifica el formato del texto.', 'error');
+    }
+}
+
+/**
+ * Descarga el contenido del resultado como archivo .txt
+ */
+function descargarResultado() {
+    const resultado = document.getElementById('resultado-aes').textContent.trim();
+
+    if (!resultado) {
+        mostrarAlerta('alerta-aes', 'No hay nada que descargar.', 'error');
+        return;
     }
 
-    // ========== FUNCIÓN PARA DESCARGAR EL RESULTADO ==========
-    function descargarResultado() {
-        var resultado = document.getElementById('resultado-aes').textContent.trim();
-
-        if (!resultado) {
-            mostrarAlerta('alerta-aes', 'No hay nada que descargar. Primero encripta o desencripta algo.', 'error');
-            return;
-        }
-
-        // Crear un blob con el contenido
-        var blob = new Blob([resultado], { type: 'text/plain;charset=utf-8' });
-
-        // Crear un enlace temporal para descargar
-        var enlace = document.createElement('a');
+    try {
+        // Crear blob con el contenido
+        const blob = new Blob([resultado], { type: 'text/plain;charset=utf-8' });
+        const enlace = document.createElement('a');
         enlace.href = URL.createObjectURL(blob);
 
-        // Nombre del archivo con fecha y hora
-        var fecha = new Date();
-        var nombreArchivo = 'cifrado_AES_' +
-            fecha.getFullYear() +
-            ('0' + (fecha.getMonth() + 1)).slice(-2) +
-            ('0' + fecha.getDate()).slice(-2) + '_' +
-            ('0' + fecha.getHours()).slice(-2) +
-            ('0' + fecha.getMinutes()).slice(-2) +
-            ('0' + fecha.getSeconds()).slice(-2) +
-            '.txt';
+        // Generar nombre de archivo con timestamp
+        const fecha = new Date();
+        const timestamp = fecha.toISOString()
+            .replace(/[-:.TZ]/g, '')
+            .slice(0, 14); // YYYYMMDDHHmmss
 
-        enlace.download = nombreArchivo;
+        enlace.download = `resultado_AES_${timestamp}.txt`;
 
         // Simular click para descargar
         document.body.appendChild(enlace);
         enlace.click();
         document.body.removeChild(enlace);
 
-        // Liberar el objeto URL
+        // Liberar memoria
         URL.revokeObjectURL(enlace.href);
 
-        mostrarAlerta('alerta-aes', 'Archivo descargado: ' + nombreArchivo, 'exito');
-    }
+        mostrarAlerta('alerta-aes', `Archivo descargado: resultado_AES_${timestamp}.txt`, 'exito');
 
-    // ========== Limpieza de Inputs ===========
-    function limpiarAES() {
-        document.getElementById('texto-aes').value = '';
-        document.getElementById('resultado-aes').textContent = '';
-        document.getElementById('archivo-aes').value = '';
-        document.getElementById('alerta-aes').innerHTML = '';
-        mostrarAlerta('alerta-aes', 'Campos limpiados correctamente', 'exito');
+    } catch (error) {
+        console.error('Error al descargar:', error);
+        mostrarAlerta('alerta-aes', 'Error al descargar el archivo.', 'error');
     }
+}
 
-    // ========== Manejo de archivo al cargar ===========
-    document.getElementById('archivo-aes').addEventListener('change', function(e) {
-        if (e.target.files.length > 0) {
-            var nombreArchivo = e.target.files[0].name;
-            mostrarAlerta('alerta-aes', 'Archivo cargado: ' + nombreArchivo, 'exito');
-        }
-    });
+/**
+ * Limpia todos los campos del formulario
+ */
+function limpiarAES() {
+    document.getElementById('texto-aes').value = '';
+    document.getElementById('clave-aes').value = '';
+    document.getElementById('resultado-aes').textContent = '';
+    document.getElementById('archivo-aes').value = '';
+    document.getElementById('alerta-aes').innerHTML = '';
+
+    mostrarAlerta('alerta-aes', 'Campos limpiados correctamente.', 'exito');
+}
+
+// ============================================
+// EVENT LISTENERS
+// ============================================
+
+// Botón Encriptar
+document.getElementById('btn-encriptar').addEventListener('click', () => {
+    cargarDatos('encriptar');
+});
+
+// Botón Desencriptar
+document.getElementById('btn-desencriptar').addEventListener('click', () => {
+    cargarDatos('desencriptar');
+});
+
+// Botón Limpiar
+document.getElementById('btn-limpiar').addEventListener('click', limpiarAES);
+
+// Botón Descargar
+document.getElementById('btn-descargar').addEventListener('click', descargarResultado);
+
+// Notificación al cargar archivo
+document.getElementById('archivo-aes').addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        const nombreArchivo = e.target.files[0].name;
+        mostrarAlerta('alerta-aes', `Archivo cargado: ${nombreArchivo}`, 'exito');
+    }
+});
+
+// Limpiar alerta al escribir en textarea
+document.getElementById('texto-aes').addEventListener('input', () => {
+    document.getElementById('alerta-aes').innerHTML = '';
+});
+
+// Limpiar alerta al escribir clave
+document.getElementById('clave-aes').addEventListener('input', () => {
+    document.getElementById('alerta-aes').innerHTML = '';
+});

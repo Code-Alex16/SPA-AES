@@ -10,7 +10,7 @@
 <body>
     <div class="contenedor-principal">
         <div class="encabezado">
-            <h1>🔐 Cifrado Simétrico</h1>
+            <h1>Encripter App</h1>
             <p>Cifrado con el algoritmo AES-256</p>
         </div>
 
@@ -34,9 +34,9 @@
 
             <!-- Agrupamiento de Botones -->
             <div class="grupo-botones">
-                <button class="btn-encriptar" onclick="encriptarAES()">Encriptar</button>
-                <button class="btn-desencriptar" onclick="desencriptarAES()">Desencriptar</button>
-                <button class="btn-limpiar" onclick="limpiarAES()">Limpiar</button>
+                <button id="btn-encriptar" class="btn-encriptar">Encriptar</button>
+                <button id="btn-desencriptar" class="btn-desencriptar">Desencriptar</button>
+                <button id="btn-limpiar" class="btn-limpiar">Limpiar</button>
             </div>
 
             <!-- Alerta de Error -->
@@ -46,7 +46,7 @@
             <div class="seccion-resultado">
                 <h3>Resultado:</h3>
                 <div id="resultado-aes" class="resultado"></div>
-                <button class="btn-descargar" onclick="descargarResultado()">Descargar Resultado</button>
+                <button id="btn-descargar" class="btn-descargar">Descargar Resultado</button>
             </div>
 
 
