@@ -220,6 +220,7 @@ button {
 
 .btn-descargar {
     background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    margin-top: 10px;
     color: white;
 }
 
