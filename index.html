@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encripter APP - AES-256</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="contenedor-principal">
+        <div class="encabezado">
+            <h1>🔐 Cifrado Simétrico</h1>
+            <p>Cifrado con el algoritmo AES-256</p>
+        </div>
+
+        <div id="aes" class="contenido-aes activo">
+
+            <!-- Ingreso de Datos a encriptar -->
+            <div class="seccion-entrada">
+                <label>Texto a cifrar:</label>
+                <textarea id="texto-aes" placeholder="Escribe aquí tu mensaje secreto..."></textarea>
+            </div>
+
+            <div class="seccion-entrada">
+                <label>Contraseña (clave de cifrado):</label>
+                <input type="text" id="clave-aes" placeholder="Ingresa aquí tu clave secreta...">
+            </div>
+
+            <div class="seccion-entrada">
+                <label>carga un archivo .txt (normal o ya cifrado):</label>
+                <input type="file" id="archivo-aes" accept=".txt">
+            </div>
+
+            <!-- Agrupamiento de Botones -->
+            <div class="grupo-botones">
+                <button class="btn-encriptar" onclick="encriptarAES()">Encriptar</button>
+                <button class="btn-desencriptar" onclick="desencriptarAES()">Desencriptar</button>
+                <button class="btn-descargar" onclick="descargarResultado()">Descargar</button>
+                <button class="btn-limpiar" onclick="limpiarAES()">Limpiar</button>
+            </div>
+
+            <!-- Alerta de Error -->
+            <div id="alerta-aes"></div>
+
+            <!-- Resultados de Encriptación -->
+            <div class="seccion-resultado">
+                <h3>Resultado:</h3>
+                <div id="resultado-aes" class="resultado"></div>
+            </div>
+
+            <!-- NOTA DE FLUJO DE TRABAJO modificable opcional
+            <div class="nota-importante">
+                <strong>💡 Flujo de trabajo:</strong>
+                <p>
+                    <strong>Encriptar:</strong> Escribe texto o carga archivo → Pon clave → Encriptar → Descargar resultado<br>
+                    <strong>Desencriptar:</strong> Carga el archivo cifrado → Pon la misma clave → Desencriptar → ¡Listo!<br>
+                    <strong>Sin la clave correcta es IMPOSIBLE desencriptar</strong>
+                </p>
+            </div>
+            -->
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
