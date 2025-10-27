@@ -86,6 +86,8 @@ function ejecutarCifrado(accion, contenido, clave) {
         } else if (accion === 'desencriptar') {
             // DESENCRIPTAR
             const bytes = CryptoJS.AES.decrypt(contenido, clave);
+            // convierte los bytes en texto legible con decodificador 8-bit Unicode Transformation Format
+            // bytes = 75616e -> hexadecimal a lenguaje natural -> 75 u , 61 a, 6e n
             resultado = bytes.toString(CryptoJS.enc.Utf8);
 
             // Validar que se pudo descifrar
